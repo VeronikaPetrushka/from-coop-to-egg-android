@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/ReggaeOne-Regular.ttf",
+      "sha1": "a2e8a12e136c5a7386312861c7e9f309e8322ea9"
+    },
+    {
+      "path": "assets/audio/chicken-music.mp3",
+      "sha1": "35d0bbcd5dc4c52e2e551af595b7232bb3071049"
+    }
+  ]
+}
