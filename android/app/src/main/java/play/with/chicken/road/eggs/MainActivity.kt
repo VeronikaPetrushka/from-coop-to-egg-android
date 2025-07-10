@@ -1,4 +1,4 @@
-package com.fromcooptoegg
+package play.with.chicken.road.eggs
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

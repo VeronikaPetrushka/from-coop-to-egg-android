@@ -1,5 +1,5 @@
 {
-  "name": "FromCoopToEgg",
+  "name": "fromcooptoegg",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -17,9 +17,9 @@
     "react": "^19.1.0",
     "react-native": "^0.80.1",
     "react-native-gesture-handler": "^2.27.1",
+    "react-native-rename": "^3.2.17",
     "react-native-safe-area-context": "^5.5.1",
     "react-native-screens": "^4.11.1",
-    "react-native-track-player": "^4.1.1",
     "react-native-version": "^4.0.0",
     "react-native-video": "^6.16.1",
     "react-native-webview": "^13.15.0"

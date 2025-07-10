@@ -1,4 +1,4 @@
-package com.fromcooptoegg
+package play.with.chicken.road.eggs
 
 import android.app.Application
 import com.facebook.react.PackageList

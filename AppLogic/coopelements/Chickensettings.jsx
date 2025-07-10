@@ -1,52 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Modal, View, Text, Image, TouchableOpacity, Switch, Share, Animated, Vibration } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { button, card, settings, shared } from "../coopconstants/coopstyles";
 import { close, off, share } from "../coopconstants/images";
-import { playBackgroundMusic, stopBackgroundMusic } from '../coopconstants/sound';
 
 const Chickensettings = ({ opened, onClose }) => {
-    const [musicEnabled, setMusicEnabled] = useState(true);
     const [vibrationEnabled, setVibrationEnabled] = useState(true);
     const [notification, setNotification] = useState('');
     const [notificationOpacity] = useState(new Animated.Value(0));
     
-    const rowAnimations = Array(5).fill().map(() => new Animated.Value(0));
+    const rowAnimations = useRef(Array(4).fill().map(() => new Animated.Value(0))).current;
 
     const loadSettings = async () => {
         try {
-            const settings = await AsyncStorage.multiGet([
-                'musicEnabled',
-                'vibrationEnabled'
-            ]);
+            const vibration = await AsyncStorage.getItem('vibrationEnabled');
             
-            if (settings[0][1] !== null) {
-                const music = settings[0][1] === 'true';
-                setMusicEnabled(music);
-                if (music) {
-                    await playBackgroundMusic();
-                } else {
-                    await stopBackgroundMusic();
-                }
-            }
-            
-            if (settings[1][1] !== null) {
-                setVibrationEnabled(settings[1][1] === 'true');
+            if (vibration !== null) {
+                setVibrationEnabled(vibration === 'true');
             }
         } catch (error) {
             console.error('Error loading settings:', error);
         }
-    };
-
-    const toggleMusic = async (value) => {
-        setMusicEnabled(value);
-        await AsyncStorage.setItem('musicEnabled', value.toString());
-        if (value) {
-            await playBackgroundMusic();
-        } else {
-            await stopBackgroundMusic();
-        }
-        if (vibrationEnabled) Vibration.vibrate(50);
     };
 
     const toggleVibration = async (value) => {
@@ -107,7 +81,6 @@ const Chickensettings = ({ opened, onClose }) => {
 
     useEffect(() => {
         if (opened) {
-            loadSettings();
             rowAnimations.forEach((anim, index) => {
                 Animated.spring(anim, {
                     toValue: 1,
@@ -120,6 +93,10 @@ const Chickensettings = ({ opened, onClose }) => {
             rowAnimations.forEach(anim => anim.setValue(0));
         }
     }, [opened]);
+
+    useEffect(() => {
+        loadSettings();
+    }, []);
 
     return (
         <Modal
@@ -134,34 +111,6 @@ const Chickensettings = ({ opened, onClose }) => {
                         <Image source={close} style={button.closeBtn} />
                     </TouchableOpacity>
 
-                    {/* Music Setting */}
-                    <Animated.View 
-                        style={[
-                            shared.row, 
-                            { 
-                                justifyContent: 'space-between', 
-                                width: '90%', 
-                                alignSelf: 'center', 
-                                marginBottom: 16,
-                                transform: [{ 
-                                    translateX: rowAnimations[0].interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [-100, 0]
-                                    }) 
-                                }],
-                                opacity: rowAnimations[0]
-                            }
-                        ]}
-                    >
-                        <Text style={settings.text}>{'Music'.toUpperCase()}</Text>
-                        <Switch 
-                            value={musicEnabled}
-                            onValueChange={toggleMusic}
-                            trackColor={{ false: "#767577", true: "#F7A808" }}
-                            thumbColor={musicEnabled ? "#923A00" : "#f4f3f4"}
-                        />
-                    </Animated.View>
-
                     {/* Vibration Setting */}
                     <Animated.View 
                         style={[
@@ -172,12 +121,12 @@ const Chickensettings = ({ opened, onClose }) => {
                                 alignSelf: 'center', 
                                 marginBottom: 10,
                                 transform: [{ 
-                                    translateX: rowAnimations[1].interpolate({
+                                    translateX: rowAnimations[0].interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [-100, 0]
                                     }) 
                                 }],
-                                opacity: rowAnimations[1]
+                                opacity: rowAnimations[0]
                             }
                         ]}
                     >
@@ -186,7 +135,7 @@ const Chickensettings = ({ opened, onClose }) => {
                             value={vibrationEnabled}
                             onValueChange={toggleVibration}
                             trackColor={{ false: "#767577", true: "#F7A808" }}
-                            thumbColor={vibrationEnabled ? "#923A00" : "#f4f3f4"}
+                            thumbColor={vibrationEnabled ? "#F7A808" : "#f4f3f4"}
                         />
                     </Animated.View>
 
@@ -200,12 +149,12 @@ const Chickensettings = ({ opened, onClose }) => {
                                 alignSelf: 'center', 
                                 marginBottom: 3,
                                 transform: [{ 
-                                    translateX: rowAnimations[2].interpolate({
+                                    translateX: rowAnimations[1].interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [-100, 0]
                                     }) 
                                 }],
-                                opacity: rowAnimations[2]
+                                opacity: rowAnimations[1]
                             }
                         ]}
                     >
@@ -225,12 +174,12 @@ const Chickensettings = ({ opened, onClose }) => {
                                 alignSelf: 'center', 
                                 marginBottom: 3,
                                 transform: [{ 
-                                    translateX: rowAnimations[3].interpolate({
+                                    translateX: rowAnimations[2].interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [-100, 0]
                                     }) 
                                 }],
-                                opacity: rowAnimations[3]
+                                opacity: rowAnimations[2]
                             }
                         ]}
                     >
@@ -250,12 +199,12 @@ const Chickensettings = ({ opened, onClose }) => {
                                 alignSelf: 'center', 
                                 marginBottom: 3,
                                 transform: [{ 
-                                    translateX: rowAnimations[4].interpolate({
+                                    translateX: rowAnimations[3].interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [-100, 0]
                                     }) 
                                 }],
-                                opacity: rowAnimations[4]
+                                opacity: rowAnimations[3]
                             }
                         ]}
                     >

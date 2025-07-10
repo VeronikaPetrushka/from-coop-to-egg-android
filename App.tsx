@@ -1,4 +1,4 @@
-import React, { JSX, useEffect } from 'react';
+import React, { JSX } from 'react';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,7 +13,6 @@ import {
     FactReadelement,
     MiniGameelement
 } from './AppLogic/coopconstants/chickenelements';
-import { initializeMusic } from './AppLogic/coopconstants/sound';
 
 export type RootStackParamList = {
     Loaderelement: undefined;
@@ -32,10 +31,6 @@ enableScreens();
 const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
-
-  useEffect(() => {
-        initializeMusic();
-  }, []);
 
   return (
       <NavigationContainer>
